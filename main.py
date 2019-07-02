@@ -3,10 +3,9 @@
 import time
 import requests;
 import json;
-import asyncio
-import types
 from configparser import ConfigParser
 #import websockets
+import types
 import websocket
 import dateutil.parser as dp
 import hmac
@@ -15,20 +14,19 @@ import zlib
 
 #log config
 import logging
-import logging.handlers
-import logging.config
 from datetime import datetime
 
 symbol1LastCallTime  = 0.0 
 symbol2LastCallTime  = 0.0 
 symbol3LastCallTime  = 0.0 
+symbol4LastCallTime  = 0.0 
 
 api_key = '78e83f11-0fc6-41ba-bb60-8c9042dae10f'
 seceret_key = '9F9E3F62F577C6C34FD73540044C4B15'
 passphrase = '857824'
 url = 'wss://real.okex.com:10442/ws/v3'
-channels = ["swap/ticker:BTC-USD-SWAP"]
-channel2 = ["spot/ticker:BTC-USDT","spot/ticker:ETH-USDT","spot/ticker:EOS-USDT"]
+#channel = ""
+#channel = ["spot/ticker:BTC-USDT","spot/ticker:ETH-USDT","spot/ticker:EOS-USDT","spot/ticker:LTC-USDT"]
 
 class cfgSet:
     pass
@@ -50,23 +48,22 @@ def on_message(ws, message):  # 服务器有数据更新时，主动推送过来
     decompress = zlib.decompressobj(-zlib.MAX_WBITS) # see above
     inflated = decompress.decompress(message)
     inflated += decompress.flush()
-    # t = tpye(inflated)
     data = str(inflated,encoding='utf-8')
     ticker = json.loads(data)
+    print(ticker)
     logging.info(ticker)
     if 'data' not in ticker:
         return
-
+    num = len(ticker['data'])
+    i = 0
     try: 
-        num = len(ticker['data'])
-        i = 0
         while i < num:
             dataCheck(ticker['data'][i]['instrument_id'],ticker['data'][0])
             logging.info(ticker['data'][i]['timestamp'])
             i = i+1
     except Exception as e:
         print("error ",str(e))
-        logging.error("error ",str(e))
+        logging.error(str(e))
 
 def on_error(ws, error):  # 程序报错时，就会触发on_error事件
     print("on_error",str(error))
@@ -74,12 +71,12 @@ def on_error(ws, error):  # 程序报错时，就会触发on_error事件
 
 def on_close(ws):
     logging.info("Connection closed ……")
-    webSocketRun()
+    #webSocketRun()
 
 def on_open(ws):  # 连接到服务器之后就会触发on_open事件，这里用于send数据
     loginParams(ws)
     time.sleep(2)
-    sub_param = {"op": "subscribe", "args": channel2}
+    sub_param = {"op": "subscribe", "args":cfgSet.subscribe}
     sub_str = json.dumps(sub_param)
     ws.send(sub_str)
 
@@ -94,6 +91,9 @@ def quoteWatchInit():
         cfgSet.run = cfg.getboolean('Unity','run')
         cfgSet.timeStart = cfg.get('Unity','timeStart')
         cfgSet.timeEnd = cfg.get('Unity','timeEnd')
+        channel = cfg.get('Unity','subscribe')
+        cfgSet.subscribe = channel.split(',')
+        logging.info(cfgSet.subscribe)
         logging.info(str(cfgSet.phone)+" "+str(cfgSet.timeStart)+" "+str(cfgSet.timeEnd)+" "+str(cfgSet.run))
 
         cfgSet.symbol1 = str(cfg.get('pair1','symbol'))
@@ -110,32 +110,50 @@ def quoteWatchInit():
         cfgSet.priceHigh3 = cfg.getfloat('pair3','priceHigh')
         cfgSet.priceLow3 = cfg.getfloat('pair3','priceLow')
         logging.info("pair3: "+str(cfgSet.symbol3)+" "+str(cfgSet.priceHigh3)+" "+str(cfgSet.priceLow3))
+
+        cfgSet.symbol4 = str(cfg.get('pair4','symbol'))
+        cfgSet.priceHigh4 = cfg.getfloat('pair4','priceHigh')
+        cfgSet.priceLow4 = cfg.getfloat('pair4','priceLow')
+
+        logging.info("pair4: "+str(cfgSet.symbol4)+" "+str(cfgSet.priceHigh4)+" "+str(cfgSet.priceLow4))
     except Exception as e:
         logging.error("config error ",str(e))
 
 # check time ,check price 
 def dataCheck(symbol,data):
-    lastPrice = float(data["last"])
+
+    try:
+        lastPrice = float(data["last"])
+    except Exception as e:
+        print("error ",str(e))
+
     # check price 
     if symbol == cfgSet.symbol1:
-        if lastPrice >= cfgSet.priceHigh1 :
+        if lastPrice > cfgSet.priceHigh1 :
             warnNum = "100001"
-        elif lastPrice <= cfgSet.priceLow1:
+        elif lastPrice < cfgSet.priceLow1:
             warnNum = "100002"
         else:
             return
     elif symbol == cfgSet.symbol2:
-        if lastPrice >= cfgSet.priceHigh2 :
+        if lastPrice > cfgSet.priceHigh2 :
             warnNum = "200001"
-        elif lastPrice <= cfgSet.priceLow2:
+        elif lastPrice < cfgSet.priceLow2:
             warnNum = "200002"
         else:
             return
     elif symbol == cfgSet.symbol3:
-        if lastPrice >= cfgSet.priceHigh3 :
+        if lastPrice > cfgSet.priceHigh3 :
             warnNum = "300001"
-        elif lastPrice <= cfgSet.priceLow3:
+        elif lastPrice < cfgSet.priceLow3:
             warnNum = "300002"
+        else:
+            return
+    elif symbol == cfgSet.symbol4:
+        if lastPrice > cfgSet.priceHigh4 :
+            warnNum = "400001"
+        elif lastPrice < cfgSet.priceLow4:
+            warnNum = "400002"
         else:
             return
     else:
@@ -144,7 +162,7 @@ def dataCheck(symbol,data):
     #check time
     i = 0
     nowtime = time.time()
-    global symbol1LastCallTime,symbol2LastCallTime,symbol3LastCallTime
+    global symbol1LastCallTime,symbol2LastCallTime,symbol3LastCallTime,symbol4LastCallTime
     if symbol == cfgSet.symbol1:
         if nowtime - symbol1LastCallTime < 3600*2:
             return 
@@ -155,11 +173,17 @@ def dataCheck(symbol,data):
             return 
         else:
             symbol2LastCallTime = nowtime
-    else:
+    elif symbol == cfgSet.symbol3:
         if nowtime - symbol3LastCallTime < 3600*2:
             return 
         else:
             symbol3LastCallTime = nowtime
+    else:
+        if nowtime - symbol4LastCallTime < 3600*2:
+            return 
+        else:
+            symbol4LastCallTime = nowtime
+        
 
     #check time
     while i < 2:
@@ -197,55 +221,3 @@ if __name__ == "__main__":
     logInit()
     quoteWatchInit()
     webSocketRun()
-
-
-
-'''
-#import ccxt
-#import ccxt.async_support as ccxt # link against the asynchronous version of ccxt
-# log and email
-async def quoteWatch():
-    print("in quoteWatch")
-    tasks = []
-    for symbol in cfgSet.symbols:
-        tasks.append(getQuote(symbol))
-    await asyncio.gather(*tasks)
-    time.sleep(1)
-# get quote
-async def getQuote(symbol) :
-    while True:
-        print(">>> query symbol:",symbol,datetime.datetime.now())
-        ticker = await exchange.fetch_ticker(symbol)
-        # check
-        dataCheck(symbol,ticker)
-
-        print ("get",ticker["symbol"])
-        time.sleep(6)
-    return ticker
-if __name__ == "__main__":
-    quoteWatchInit()
-    # quoteWatch()
-    loop = asyncio.get_event_loop()
-    #loop.run_until_complete(quoteWatch())
-    coro = quoteWatch()
-    asyncio.ensure_future(coro)
-    loop.run_forever()
-    exchange.close()
-
-async def load_markets(exchange, symbol):
-    try:
-        result = await exchange.load_markets()
-        return result
-    except ccxt.BaseError as e:
-        print(type(e).__name__, str(e), str(e.args))
-        raise e
-exchange = ccxt.huobiru({
-            'apiKey':"afwo04df3f-15525462-823e2387-4e62e",
-            'enableRateLimit': True,  # required accoding to the Manual
-        })
-print("rateLimit:",exchange.rateLimit)
-
-
-# markets = await exchange.load_markets()
-# print (markets)
-'''
