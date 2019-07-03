@@ -89,6 +89,9 @@ def quoteWatchInit():
         cfgSet.passphrase = str(cfg.get('Unity','passphrase'))
         print(cfgSet.api_key+","+cfgSet.seceret_key+","+cfgSet.passphrase)
         logging.info(cfgSet.api_key+","+cfgSet.seceret_key+","+cfgSet.passphrase)
+        cfgSet.phoneKey = str(cfg.get('Unity','phoneKey'))
+        print(cfgSet.phoneKey)
+        logging.info(cfgSet.phoneKey)
 
         cfgSet.phone = cfg.get('Unity','phone')
         channel = cfg.get('Unity','subscribe')
@@ -200,7 +203,7 @@ def dataCheck(symbol,data):
 # call phone 
 def sendCall(warnInfo):
     resp = requests.post(("http://voice-api.luosimao.com/v1/verify.json"),
-    auth=("api", "key-1c7411a7ddb9c76d0c739636a715e5f8"),
+    auth=("api", cfgSet.phoneKey),
     data={
 	"mobile": cfgSet.phone,
 	"code": warnInfo},
