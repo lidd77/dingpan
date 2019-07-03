@@ -3,7 +3,8 @@
 import time
 import requests;
 import json;
-from configparser import ConfigParser
+#import configparser
+from configparser import ConfigParser,ExtendedInterpolation
 import websocket
 import hmac
 import base64
@@ -18,12 +19,8 @@ symbol2LastCallTime  = 0.0
 symbol3LastCallTime  = 0.0 
 symbol4LastCallTime  = 0.0 
 
-api_key = '78e83f11-0fc6-41ba-bb60-8c9042dae10f'
-seceret_key = '9F9E3F62F577C6C34FD73540044C4B15'
-passphrase = '857824'
+
 url = 'wss://real.okex.com:10442/ws/v3'
-#channel = ""
-#channel = ["spot/ticker:BTC-USDT","spot/ticker:ETH-USDT","spot/ticker:EOS-USDT","spot/ticker:LTC-USDT"]
 
 class cfgSet:
     pass
@@ -34,10 +31,10 @@ def loginParams(ws):
     unixTime = time.time()
     timestamp = str(round(unixTime))
     message = timestamp + 'GET' + '/users/self/verify'
-    mac = hmac.new(bytes(seceret_key, encoding='utf8'), bytes(message, encoding='utf-8'), digestmod='sha256')
+    mac = hmac.new(bytes(cfgSet.seceret_key, encoding='utf8'), bytes(message, encoding='utf-8'), digestmod='sha256')
     d = mac.digest()
     sign = base64.b64encode(d)
-    login_param = {"op": "login", "args": [api_key, passphrase, timestamp, sign.decode("utf-8")]}
+    login_param = {"op": "login", "args": [cfgSet.api_key, cfgSet.passphrase, timestamp, sign.decode("utf-8")]}
     login_str = json.dumps(login_param)
     ws.send(login_str)
 
@@ -49,6 +46,7 @@ def on_message(ws, message):  # 服务器有数据更新时，主动推送过来
     ticker = json.loads(data)
     logging.info(ticker)
     if 'data' not in ticker:
+        print(ticker)
         return
     num = len(ticker['data'])
     i = 0
@@ -67,6 +65,7 @@ def on_error(ws, error):  # 程序报错时，就会触发on_error事件
 
 def on_close(ws):
     logging.info("Connection closed ……")
+    print("Connection closed ……")
     #webSocketRun()
 
 def on_open(ws):  # 连接到服务器之后就会触发on_open事件，这里用于send数据
@@ -79,43 +78,52 @@ def on_open(ws):  # 连接到服务器之后就会触发on_open事件，这里�
 # init
 def quoteWatchInit():
     print("in quoteWatchInit\r\n")
-    cfg = ConfigParser()
+    #cfg = ConfigParser()
+    cfg =  ConfigParser(interpolation=ExtendedInterpolation())
     try:
         cfg.read('./config.ini')
         cfg.sections()
 
+        cfgSet.api_key = str(cfg.get('Unity','api_key'))
+        cfgSet.seceret_key = str(cfg.get('Unity','seceret_key'))
+        cfgSet.passphrase = str(cfg.get('Unity','passphrase'))
+        print(cfgSet.api_key+","+cfgSet.seceret_key+","+cfgSet.passphrase)
+        logging.info(cfgSet.api_key+","+cfgSet.seceret_key+","+cfgSet.passphrase)
+
         cfgSet.phone = cfg.get('Unity','phone')
-        cfgSet.run = cfg.getboolean('Unity','run')
-        cfgSet.timeStart = cfg.get('Unity','timeStart')
-        cfgSet.timeEnd = cfg.get('Unity','timeEnd')
         channel = cfg.get('Unity','subscribe')
         cfgSet.subscribe = channel.split(',')
         logging.info(cfgSet.subscribe)
-        logging.info(str(cfgSet.phone)+" "+str(cfgSet.timeStart)+" "+str(cfgSet.timeEnd)+" "+str(cfgSet.run))
+        print(cfgSet.subscribe)
+        logging.info(str(cfgSet.phone))
 
         cfgSet.symbol1 = str(cfg.get('pair1','symbol'))
         cfgSet.priceHigh1 = cfg.getfloat('pair1','priceHigh')
         cfgSet.priceLow1 = cfg.getfloat('pair1','priceLow')
         logging.info("pair1: "+str(cfgSet.symbol1)+" "+str(cfgSet.priceHigh1)+" "+str(cfgSet.priceLow1))
+        print(("pair1: "+str(cfgSet.symbol1)+" "+str(cfgSet.priceHigh1)+" "+str(cfgSet.priceLow1)))
 
         cfgSet.symbol2 = str(cfg.get('pair2','symbol'))
         cfgSet.priceHigh2 = cfg.getfloat('pair2','priceHigh')
         cfgSet.priceLow2 = cfg.getfloat('pair2','priceLow')
         logging.info("pair2: "+str(cfgSet.symbol2)+" "+str(cfgSet.priceHigh2)+" "+str(cfgSet.priceLow2 ))
+        print("pair2: "+str(cfgSet.symbol2)+" "+str(cfgSet.priceHigh2)+" "+str(cfgSet.priceLow2 ))
 
         cfgSet.symbol3 = str(cfg.get('pair3','symbol'))
         cfgSet.priceHigh3 = cfg.getfloat('pair3','priceHigh')
         cfgSet.priceLow3 = cfg.getfloat('pair3','priceLow')
         logging.info("pair3: "+str(cfgSet.symbol3)+" "+str(cfgSet.priceHigh3)+" "+str(cfgSet.priceLow3))
+        print("pair3: "+str(cfgSet.symbol3)+" "+str(cfgSet.priceHigh3)+" "+str(cfgSet.priceLow3))
 
         cfgSet.symbol4 = str(cfg.get('pair4','symbol'))
         cfgSet.priceHigh4 = cfg.getfloat('pair4','priceHigh')
         cfgSet.priceLow4 = cfg.getfloat('pair4','priceLow')
 
         logging.info("pair4: "+str(cfgSet.symbol4)+" "+str(cfgSet.priceHigh4)+" "+str(cfgSet.priceLow4))
+        print("pair4: "+str(cfgSet.symbol4)+" "+str(cfgSet.priceHigh4)+" "+str(cfgSet.priceLow4))
     except Exception as e:
         logging.error("config error ",str(e))
-
+        print("config error ",str(e))
 # check time ,check price 
 def dataCheck(symbol,data):
 
@@ -123,6 +131,7 @@ def dataCheck(symbol,data):
         lastPrice = float(data["last"])
     except Exception as e:
         print("error ",str(e))
+        logging.info("error ",str(e))
 
     # check price 
     if symbol == cfgSet.symbol1:
@@ -155,6 +164,7 @@ def dataCheck(symbol,data):
             return
     else:
         logging.info("error symbol:",symbol)
+        print("error symbol:",symbol)
     
     #check time
     i = 0
@@ -196,17 +206,19 @@ def sendCall(warnInfo):
 	"code": warnInfo},
     timeout=3 , verify=False)
     result =  json.loads( resp.content )
+    print("call "+cfgSet.phone+" :"+warnInfo)
+    logging.info("call "+cfgSet.phone+" :"+warnInfo)
     logging.info(result)
+    print(result)
     return result
 
 def logInit():
-    print("in log Init")
     LOG_FORMAT = "%(asctime)s- %(levelname)s - %(message)s [%(filename)s:%(lineno)s]"
     filename = datetime.now().strftime("%Y%m%d-%H%M%S")+'.log'
     logging.basicConfig(filename="./logs/"+filename, level=logging.INFO, format=LOG_FORMAT)
+    print("create ./logs/",filename)
 
 def webSocketRun():
-    print("in webSocketRun")
     ws = websocket.WebSocketApp(url,
                                 on_message=on_message,
                                 on_error=on_error,
@@ -214,6 +226,7 @@ def webSocketRun():
     ws.on_open = on_open
     ws.run_forever(ping_timeout=15)
     logging.info("webSocketRun")
+    print("webSocket Runing ....")
 
 if __name__ == "__main__":
     websocket.enableTrace(True)
