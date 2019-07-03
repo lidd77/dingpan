@@ -4,10 +4,7 @@ import time
 import requests;
 import json;
 from configparser import ConfigParser
-#import websockets
-import types
 import websocket
-import dateutil.parser as dp
 import hmac
 import base64
 import zlib
@@ -50,7 +47,6 @@ def on_message(ws, message):  # 服务器有数据更新时，主动推送过来
     inflated += decompress.flush()
     data = str(inflated,encoding='utf-8')
     ticker = json.loads(data)
-    print(ticker)
     logging.info(ticker)
     if 'data' not in ticker:
         return
@@ -59,7 +55,7 @@ def on_message(ws, message):  # 服务器有数据更新时，主动推送过来
     try: 
         while i < num:
             dataCheck(ticker['data'][i]['instrument_id'],ticker['data'][0])
-            logging.info(ticker['data'][i]['timestamp'])
+            #logging.info(ticker['data'][i]['timestamp'])
             i = i+1
     except Exception as e:
         print("error ",str(e))
@@ -82,9 +78,10 @@ def on_open(ws):  # 连接到服务器之后就会触发on_open事件，这里�
 
 # init
 def quoteWatchInit():
+    print("in quoteWatchInit\r\n")
     cfg = ConfigParser()
     try:
-        cfg.read('config.ini')
+        cfg.read('./config.ini')
         cfg.sections()
 
         cfgSet.phone = cfg.get('Unity','phone')
@@ -203,11 +200,13 @@ def sendCall(warnInfo):
     return result
 
 def logInit():
+    print("in log Init")
     LOG_FORMAT = "%(asctime)s- %(levelname)s - %(message)s [%(filename)s:%(lineno)s]"
-    filename1 = datetime.now().strftime("%Y%m%d-%H%M%S")+'.log'
-    logging.basicConfig(filename=filename1, level=logging.INFO, format=LOG_FORMAT)
+    filename = datetime.now().strftime("%Y%m%d-%H%M%S")+'.log'
+    logging.basicConfig(filename="./logs/"+filename, level=logging.INFO, format=LOG_FORMAT)
 
 def webSocketRun():
+    print("in webSocketRun")
     ws = websocket.WebSocketApp(url,
                                 on_message=on_message,
                                 on_error=on_error,
