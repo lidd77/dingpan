@@ -10,7 +10,6 @@ OK_ACCESS_TIMESTAMP = 'OK-ACCESS-TIMESTAMP'
 OK_ACCESS_PASSPHRASE = 'OK-ACCESS-PASSPHRASE'
 APPLICATION_JSON = 'application/json'
 
-
 # signature
 def signature(timestamp, method, request_path, body, secret_key):
     if str(body) == '{}' or str(body) == 'None':
@@ -75,7 +74,7 @@ request_path = '/api/spot/v3/orders'
 
 # request params
 params = {'type': 'market', 'side': 'buy', 'instrument_id': 'usdt_okb', 'size': '10', 'client_oid': '',
-                  'price': '10', 'funds': ''}
+                   'price': '10', 'funds': ''}
 
 # request path
 request_path = request_path + parse_params_to_str(params)

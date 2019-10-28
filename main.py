@@ -66,7 +66,9 @@ def on_error(ws, error):  # 程序报错时，就会触发on_error事件
 def on_close(ws):
     logging.info("Connection closed ……")
     print("Connection closed ……")
-    #webSocketRun()
+    time.sleep(60)
+    logging.info("Connection restart!")
+    webSocketRun()
 
 def on_open(ws):  # 连接到服务器之后就会触发on_open事件，这里用于send数据
     loginParams(ws)
@@ -198,17 +200,31 @@ def dataCheck(symbol,data):
     #check time
     while i < 2:
         rst = sendCall(warnNum)
-        i = i+1
+        if rst['error'] == 0:
+            i = i+1
+        elif rst['error'] == -99999:
+            pass
+        time.sleep(61)
 
-# call phone 
+# call phone
 def sendCall(warnInfo):
-    resp = requests.post(("http://voice-api.luosimao.com/v1/verify.json"),
-    auth=("api", cfgSet.phoneKey),
-    data={
-	"mobile": cfgSet.phone,
-	"code": warnInfo},
-    timeout=3 , verify=False)
-    result =  json.loads( resp.content )
+
+    try:
+        resp = requests.post(("http://voice-api.luosimao.com/v1/verify.json"),
+        auth=("api", cfgSet.phoneKey),
+        data={
+        "mobile": cfgSet.phone,
+        "code": warnInfo},
+        timeout=10 , verify=False)
+        result =  json.loads( resp.content )
+    except Exception as e:
+        logging.error("config error ",str(e))
+        result = {
+            'error': -99999
+        }
+        json_str = json.dumps(result)
+        print(json_str)
+
     print("call "+cfgSet.phone+" :"+warnInfo)
     logging.info("call "+cfgSet.phone+" :"+warnInfo)
     logging.info(result)

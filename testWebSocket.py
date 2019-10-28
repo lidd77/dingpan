@@ -17,39 +17,7 @@ url = 'wss://real.okex.com:10442/ws/v3'
 channels = ["swap/ticker:BTC-USD-SWAP"]
 channel2 = ["spot/ticker:BTC-USDT","spot/ticker:ETH-USDT","spot/ticker:EOS-USDT"]
 
-rst = asyncio.get_event_loop().run_until_complete(login(url, api_key, passphrase, seceret_key))
 
-symbol1LastCallTime  = 0.0 
-symbol2LastCallTime  = 0.0 
-symbol3LastCallTime  = 0.0 
-
-nowtime = time.time()
-global symbol1LastCallTime,symbol2LastCallTime,symbol3LastCallTime
-
-
-
-if symbol == cfgSet.symbol1:
-    if nowtime - coin1LastCallTime < 3600*2:
-        return 
-    else:
-        lastCallTime = nowtime
-elif symbol == cfgSet.symbol2:
- 
-elif:
-
-
-def login():
-    unixTime = time.time()
-    timestamp = str(round(unixTime))
-    #login_str = login_params(str(timestamp), api_key, passphrase, secret_key)
-    message = timestamp + 'GET' + '/users/self/verify'
-    mac = hmac.new(bytes(secret_key, encoding='utf8'), bytes(message, encoding='utf-8'), digestmod='sha256')
-    d = mac.digest()
-    sign = base64.b64encode(d)
-    login_param = {"op": "login", "args": [api_key, passphrase, timestamp, sign.decode("utf-8")]}
-    login_str = json.dumps(login_param)
-    await websocket.send(login_str)
-    login_res = await websocket.recv()
 
 def login_params(timestamp, api_key, passphrase, secret_key):
     message = timestamp + 'GET' + '/users/self/verify'
