@@ -224,7 +224,6 @@ def sendCall(warnInfo):
         }
         json_str = json.dumps(result)
         print(json_str)
-
     print("call "+cfgSet.phone+" :"+warnInfo)
     logging.info("call "+cfgSet.phone+" :"+warnInfo)
     logging.info(result)

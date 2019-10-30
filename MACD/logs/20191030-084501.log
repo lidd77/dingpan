@@ -1,0 +1,39 @@
+2019-10-30 08:45:01,917- INFO - 78e83f11-0fc6-41ba-bb60-8c9042dae10f,9F9E3F62F577C6C34FD73540044C4B15,857824 [MyMACD.py:249]
+2019-10-30 08:45:01,917- INFO - key-1c7411a7ddb9c76d0c739636a715e5f8 [MyMACD.py:252]
+2019-10-30 08:45:01,918- INFO - ['futures/ticker:BTC-USD-191127', 'futures/ticker:ETH-USD-191127', 'futures/ticker:EOS-USD-191127', 'futures/ticker:LTC-USD-191127'] [MyMACD.py:257]
+2019-10-30 08:45:01,918- INFO - 17005486688 [MyMACD.py:259]
+2019-10-30 08:45:01,918- INFO - pair1: BTC-USD-191127 10400.0 10200.0 [MyMACD.py:264]
+2019-10-30 08:45:01,918- INFO - pair2: ETH-USD-191127 310.0 288.0 [MyMACD.py:270]
+2019-10-30 08:45:01,918- INFO - pair3: EOS-USD-191127 7.05 5.98 [MyMACD.py:276]
+2019-10-30 08:45:01,918- INFO - pair4: LTC-USD-191127 130.0 120.0 [MyMACD.py:283]
+2019-10-30 08:45:02,064- DEBUG - --- request header --- [_logging.py:55]
+2019-10-30 08:45:02,064- DEBUG - GET /ws/v3 HTTP/1.1
+Upgrade: websocket
+Connection: Upgrade
+Host: real.okex.com:10442
+Origin: http://real.okex.com:10442
+Sec-WebSocket-Key: ki03Z6Lj9CwOXYh5m99CDg==
+Sec-WebSocket-Version: 13
+
+ [_logging.py:56]
+2019-10-30 08:45:02,065- DEBUG - ----------------------- [_logging.py:57]
+2019-10-30 08:45:02,065- DEBUG - --- response header --- [_logging.py:74]
+2019-10-30 08:45:02,114- DEBUG - HTTP/1.1 101 Switching Protocols [_logging.py:74]
+2019-10-30 08:45:02,114- DEBUG - Server: nginx [_logging.py:74]
+2019-10-30 08:45:02,115- DEBUG - Date: Wed, 30 Oct 2019 00:45:02 GMT [_logging.py:74]
+2019-10-30 08:45:02,115- DEBUG - Connection: upgrade [_logging.py:74]
+2019-10-30 08:45:02,115- DEBUG - upgrade: websocket [_logging.py:74]
+2019-10-30 08:45:02,116- DEBUG - sec-websocket-accept: RbMj59iUzJUNRo1rNBOwPc5/Ve8= [_logging.py:74]
+2019-10-30 08:45:02,116- DEBUG - ----------------------- [_logging.py:74]
+2019-10-30 08:45:02,116- DEBUG - send: b'\x81\xfe\x00\x89 \xa8y\x11[\x8a\x16a\x02\x92Y3L\xc7\x1exN\x8aU1\x02\xc9\x0bvS\x8aC1{\x8aN)E\x90Jw\x11\x99T!F\xcbO<\x14\x99\x1bp\r\xca\x1b\'\x10\x85Ar\x19\x98M#D\xc9\x1c \x10\xce[=\x00\x8aA$\x17\x90K%\x02\x84Y3\x11\x9dN#\x13\x91O"\x10\x9a[=\x00\x8a\x16re\xc21 n\xc2\x1akB\xda)(M\xf0\th\x10\xc1\x0eZC\xc5!(D\xf9\x03%F\xce+}c\xdd\tsL\x9a0)C\x95[L]' [_logging.py:74]
+2019-10-30 08:45:04,117- DEBUG - send: b"\x81\xba#T\x1c#XvsS\x01n<\x01P!~P@&uAFv0\x03\x015nDPv&\x03xvoSL 3@B:xOFe$\x13\x13'&aw\x171vp\x10H\x01~)" [_logging.py:74]
+2019-10-30 08:45:04,118- INFO - {'event': 'login', 'success': True} [MyMACD.py:295]
+2019-10-30 08:45:04,167- INFO - {'event': 'subscribe', 'channel': 'spot/candle1800s:BTC-USDT'} [MyMACD.py:295]
+2019-10-30 08:45:04,168- INFO - {'table': 'spot/candle1800s', 'data': [{'candle': ['2019-10-30T00:30:00.000Z', '9395.7', '9405', '9383.6', '9387.3', '174.814269'], 'instrument_id': 'BTC-USDT'}]} [MyMACD.py:295]
+2019-10-30 08:45:07,509- INFO - {'table': 'spot/candle1800s', 'data': [{'candle': ['2019-10-30T00:30:00.000Z', '9395.7', '9405', '9383.6', '9389.9', '175.53904366'], 'instrument_id': 'BTC-USDT'}]} [MyMACD.py:295]
+2019-10-30 08:45:18,032- INFO - {'table': 'spot/candle1800s', 'data': [{'candle': ['2019-10-30T00:30:00.000Z', '9395.7', '9405', '9383.6', '9389.8', '175.56889227'], 'instrument_id': 'BTC-USDT'}]} [MyMACD.py:295]
+2019-10-30 08:45:21,553- INFO - {'table': 'spot/candle1800s', 'data': [{'candle': ['2019-10-30T00:30:00.000Z', '9395.7', '9405', '9383.6', '9389.8', '175.57179852'], 'instrument_id': 'BTC-USDT'}]} [MyMACD.py:295]
+2019-10-30 08:45:28,576- INFO - {'table': 'spot/candle1800s', 'data': [{'candle': ['2019-10-30T00:30:00.000Z', '9395.7', '9405', '9383.6', '9389.8', '175.57500473'], 'instrument_id': 'BTC-USDT'}]} [MyMACD.py:295]
+2019-10-30 08:45:32,104- INFO - {'table': 'spot/candle1800s', 'data': [{'candle': ['2019-10-30T00:30:00.000Z', '9395.7', '9405', '9383.6', '9389.9', '175.57897032'], 'instrument_id': 'BTC-USDT'}]} [MyMACD.py:295]
+2019-10-30 08:45:33,628- DEBUG - send: b'\x88\x82\x8a_\xca\xf9\x89\xb7' [_logging.py:74]
+2019-10-30 08:45:33,674- INFO - Connection closed …… [MyMACD.py:314]

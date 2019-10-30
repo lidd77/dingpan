@@ -1,0 +1,36 @@
+2019-10-29 15:26:19,192- INFO - 78e83f11-0fc6-41ba-bb60-8c9042dae10f,9F9E3F62F577C6C34FD73540044C4B15,857824 [main.py:93]
+2019-10-29 15:26:19,192- INFO - key-1c7411a7ddb9c76d0c739636a715e5f8 [main.py:96]
+2019-10-29 15:26:19,192- INFO - ['futures/ticker:BTC-USD-190927', 'futures/ticker:ETH-USD-190927', 'futures/ticker:EOS-USD-190927', 'futures/ticker:LTC-USD-190927'] [main.py:101]
+2019-10-29 15:26:19,192- INFO - 17005486688 [main.py:103]
+2019-10-29 15:26:19,192- INFO - pair1: BTC-USD-190927 10400.0 10200.0 [main.py:108]
+2019-10-29 15:26:19,193- INFO - pair2: ETH-USD-190927 310.0 288.0 [main.py:114]
+2019-10-29 15:26:19,193- INFO - pair3: EOS-USD-190927 7.05 5.98 [main.py:120]
+2019-10-29 15:26:19,193- INFO - pair4: LTC-USD-190927 130.0 120.0 [main.py:127]
+2019-10-29 15:26:19,313- DEBUG - --- request header --- [_logging.py:55]
+2019-10-29 15:26:19,314- DEBUG - GET /ws/v3 HTTP/1.1
+Upgrade: websocket
+Connection: Upgrade
+Host: real.okex.com:10442
+Origin: http://real.okex.com:10442
+Sec-WebSocket-Key: XAZ/h7M8+MPROz7V2UlVGg==
+Sec-WebSocket-Version: 13
+
+ [_logging.py:56]
+2019-10-29 15:26:19,314- DEBUG - ----------------------- [_logging.py:57]
+2019-10-29 15:26:19,314- DEBUG - --- response header --- [_logging.py:74]
+2019-10-29 15:26:19,354- DEBUG - HTTP/1.1 101 Switching Protocols [_logging.py:74]
+2019-10-29 15:26:19,354- DEBUG - Server: nginx [_logging.py:74]
+2019-10-29 15:26:19,354- DEBUG - Date: Tue, 29 Oct 2019 07:26:19 GMT [_logging.py:74]
+2019-10-29 15:26:19,355- DEBUG - Connection: upgrade [_logging.py:74]
+2019-10-29 15:26:19,355- DEBUG - upgrade: websocket [_logging.py:74]
+2019-10-29 15:26:19,355- DEBUG - sec-websocket-accept: TV4mQ08bcUA1wn8ewPd/HeNzwWU= [_logging.py:74]
+2019-10-29 15:26:19,355- DEBUG - ----------------------- [_logging.py:74]
+2019-10-29 15:26:19,356- DEBUG - send: b'\x81\xfe\x00\x89M\x85\xf3h6\xa7\x9c\x18o\xbf\xd3J!\xea\x94\x01#\xa7\xdfHo\xe4\x81\x0f>\xa7\xc9H\x16\xa7\xc4P(\xbd\xc0\x0e|\xb4\xdeX+\xe6\xc5Ey\xb4\x91\t`\xe7\x91^}\xa8\xcb\x0bt\xb5\xc7Z)\xe4\x96Y}\xe3\xd1Dm\xa7\xcb]z\xbd\xc1\\o\xa9\xd3J|\xb0\xc4Z~\xb6\xc0Qz\xbc\xd1Dm\xa7\xcb/)\xed\xbc)\x04\xb3\xb2\x01!\xb1\xbb\x04;\xdf\x95[;\xe6\xaa+\x15\xe6\xbd\x12\t\xe8\xa1\t;\xd2\xbbQ7\xfd\x96?\x06\xcd\xa2-\x0c\xb8\xd150' [_logging.py:74]
+2019-10-29 15:26:21,358- DEBUG - send: b'\x81\xfe\x00\xa19m,_BOC/\x1bW\x0c}J\x18N,Z\x1fE=\\O\x00\x7f\x1b\x0c^8JO\x16\x7fbOJ*M\x18^:JBX6Z\x06I-\x03/x\x1c\x148\x7f\x1b\x14\\\x15o\x00_\x1b}\x15M\x0e9L\x19Y-\\\x1e\x03+P\x0eG:KWi\x0bq@y\x0c}@\x1df\tT\x1eh\x1bA\x0c}_\x18X*K\x08_pM\x04O4\\\x1f\x16\x1av>\x01\nj)\x01n\x00]\x15m\x0eO\x00\x7f\x1b\x0bY+L\x1fI,\x16\x19E<R\x08^eu9orl>hr\x08T\x1cf\x0bZ\x0e\x02D' [_logging.py:74]
+2019-10-29 15:26:21,359- INFO - {'event': 'login', 'success': True} [main.py:47]
+2019-10-29 15:26:21,402- INFO - {'event': 'error', 'message': "Channel futures/ticker:BTC-USD-190927 doesn't exist", 'errorCode': 30040} [main.py:47]
+2019-10-29 15:26:21,402- INFO - {'event': 'error', 'message': "Channel futures/ticker:ETH-USD-190927 doesn't exist", 'errorCode': 30040} [main.py:47]
+2019-10-29 15:26:21,403- INFO - {'event': 'error', 'message': "Channel futures/ticker:EOS-USD-190927 doesn't exist", 'errorCode': 30040} [main.py:47]
+2019-10-29 15:26:21,403- INFO - {'event': 'error', 'message': "Channel futures/ticker:LTC-USD-190927 doesn't exist", 'errorCode': 30040} [main.py:47]
+2019-10-29 15:26:28,995- DEBUG - send: b'\x88\x82;\xcd\x94u8%' [_logging.py:74]
+2019-10-29 15:26:29,041- INFO - Connection closed …… [main.py:67]
