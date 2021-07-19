@@ -1,20 +1,14 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
-import time
-import requests;
-import json;
-#import configparser
-from configparser import ConfigParser,ExtendedInterpolation
-import websocket
-import hmac
-import base64
-import os
-import traceback
 import errno
-#log config
+import json
 import logging
 import logging.handlers
-from datetime import datetime
+import os
+import time
+from configparser import ConfigParser, ExtendedInterpolation
+
+import requests
+import websocket
 
 symbol1LastCallTime  = 0.0 
 symbol2LastCallTime  = 0.0 
